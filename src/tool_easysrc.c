@@ -175,15 +175,11 @@ void dumpeasysrc(struct GlobalConfig *config)
   struct curl_slist *ptr;
   char *o = config->libcurl;
 
-  FILE *out;
-  bool fopened = FALSE;
+  FILE *out = stdout;
   if(strcmp(o, "-")) {
     out = fopen(o, FOPEN_WRITETEXT);
-    fopened = TRUE;
   }
-  else
-    out = stdout;
-  if(!out)
+  if(out==NULL)
     warnf(config, "Failed to open %s to write libcurl code!\n", o);
   else {
     int i;
@@ -226,7 +222,7 @@ void dumpeasysrc(struct GlobalConfig *config)
     for(i = 0; ((c = srcend[i]) != NULL); i++)
       fprintf(out, "%s\n", c);
 
-    if(fopened)
+    if(out != stdout)
       fclose(out);
   }
 
